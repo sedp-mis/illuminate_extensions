@@ -1,0 +1,16 @@
+{
+    "name": "sedp-mis/lib",
+    "description": "Library or collection of classes and helpers",
+    "authors": [
+        {
+            "name": "Arjon Jason Castro",
+            "email": "ajcastro29@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "SedpMis\\Lib\\": "src/"
+        }
+    },
+}
