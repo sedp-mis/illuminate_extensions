@@ -1,6 +1,8 @@
 {
     "name": "sedp-mis/lib",
     "description": "Library or collection of classes and helpers",
+    "keywords": ["library", "lib"],
+    "license": "MIT",
     "authors": [
         {
             "name": "Arjon Jason Castro",
@@ -12,5 +14,5 @@
         "psr-4": {
             "SedpMis\\Lib\\": "src/"
         }
-    },
+    }
 }
