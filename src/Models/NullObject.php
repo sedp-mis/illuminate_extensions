@@ -2,7 +2,6 @@
 
 namespace SedpMis\Lib\Models;
 
-// TODO
-class NullObject
+class NullObject extends BaseModel
 {
 }
