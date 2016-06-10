@@ -1,7 +1,6 @@
 <?php
 
-if(! function_exists('num_zero_pad')) 
-{
+if(! function_exists('num_zero_pad')) {
     /**
      * Pad numbers with zeros.
      *
