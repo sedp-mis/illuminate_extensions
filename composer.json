@@ -9,7 +9,9 @@
             "email": "ajcastro29@gmail.com"
         }
     ],
-    "require": {},
+    "require": {
+        "php": ">=5.4.0"
+    },
     "autoload": {
         "psr-4": {
             "SedpMis\\Lib\\": "src/"
