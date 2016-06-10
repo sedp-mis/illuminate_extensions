@@ -13,5 +13,4 @@ trait MakeableTrait {
     {
         return (new \ReflectionClass(get_called_class()))->newInstanceArgs(func_get_args());
     }
-
 }
