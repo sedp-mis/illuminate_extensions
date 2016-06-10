@@ -138,7 +138,7 @@ if (!function_exists('is_collection')) {
 /*
  * Date Helpers
  */
-if(! function_exists('carbon')) {
+if(!function_exists('carbon')) {
     /**
      * Convert or return new carbon instance.
      *
@@ -159,7 +159,7 @@ if(! function_exists('carbon')) {
     }
 }
 
-if(! function_exists('sql_date')) {
+if(!function_exists('sql_date')) {
     /**
      * Convert date to mysql date format.
      *
@@ -171,6 +171,7 @@ if(! function_exists('sql_date')) {
         return $date ? date('Y-m-d', strtotime($date)) : null;
     }
 }
+
 
 /*
  * Miscellaneous Functions/Methods
