@@ -1,6 +1,6 @@
 <?php
 
-namespace Services\Nested;
+namespace SedpMis\Lib\Nested;
 
 /**
  * For nested collections.
