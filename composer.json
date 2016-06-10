@@ -15,7 +15,10 @@
     "autoload": {
         "psr-4": {
             "SedpMis\\Lib\\": "src"
-        }
+        },
+        "files": [
+            "src/helpers.php"
+        ],
     },
     "minimum-stability": "dev"
 }
