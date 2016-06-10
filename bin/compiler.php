@@ -1,8 +1,8 @@
 #!/usr/bin/env php
 <?php
 
-define('HELPERS_DIR', __DIR__.'/../');
-define('COMPILED_HELPER_FILEPATH', __DIR__.'/../../src/helpers.php');
+define('HELPERS_DIR', __DIR__.'/../src/helpers');
+define('COMPILED_HELPER_FILEPATH', __DIR__.'/../src/helpers.php');
 
 $helperFiles = scandir(HELPERS_DIR);
 
