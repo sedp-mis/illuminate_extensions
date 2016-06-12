@@ -698,7 +698,7 @@ if (!function_exists('chars_within')) {
         $openDelim = head($delims);
         $closeDelim = end($delims);
 
-        preg_match_all('/'.$openDelim.'([A-Za-z0-9_ ]+?)'.$closeDelim.'/', $string, $result);
+        preg_match_all('/'.$openDelim.'(.*?)'.$closeDelim.'/', $string, $result);
 
         return $result;
     }
