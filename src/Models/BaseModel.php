@@ -4,7 +4,7 @@ namespace SedpMis\Lib\Models;
 
 
 use Illuminate\Database\Eloquent\Model as EloquentModel;
-use Abstractions\Transformer\BaseTransformer;
+use SedpMis\Lib\Transformer\Transformer;
 use Carbon\Carbon;
 
 class BaseModel extends EloquentModel
@@ -29,6 +29,13 @@ class BaseModel extends EloquentModel
      * @var array
      */
     protected $trashedAttributes = [];
+
+    /**
+     * Delimiter use to separate the getter and setter typecasts.
+     *
+     * @var  string
+     */
+    const TYPECASTS_SEPARATOR = ',';
 
     /**
      * Instantiate or make new instance via static method.
@@ -61,13 +68,11 @@ class BaseModel extends EloquentModel
      */
     public function __set($key, $value)
     {
-        $key = snake_case($key);
-
         if ($this->isInTypecasts($key)) {
-            $this->setAttribute($key, ($this->makeTransformer([$key => $value])->getReversed()[$key]));
-        } else {
-            $this->setAttribute($key, $value);
+            $value = (new Transformer)->transform($this->setterTypecasts($key), $value);
         }
+
+        $this->setAttribute($key, $value);
     }
 
     /**
@@ -79,24 +84,18 @@ class BaseModel extends EloquentModel
      */
     public function __get($key)
     {
-        // Lets you access attributes via camel-case,
-        // so when snake_case version the attributes exists it automatically convert to snake_case
-        if (array_key_exists(snake_case($key), $this->attributes)) {
-            $key = snake_case($key);
-        }
-
         $value = $this->getAttribute($key);
 
         // Typecast attribute when exist in $typecasts property
         if ($this->isInTypecasts($key)) {
-            return $this->getTypecasted($key, $value);
+            return (new Transformer)->transform($this->getterTypecasts($key), $value);
         }
 
         return $value;
     }
 
     /**
-     * Check if an attribute is included in transformation map.
+     * Check if an attribute is included in typecasts.
      *
      * @param string $attribute Attribute to be checked
      * @return bool
@@ -104,6 +103,28 @@ class BaseModel extends EloquentModel
     public function isInTypecasts($attribute)
     {
         return array_key_exists($attribute, $this->typecasts);
+    }
+
+    /**
+     * Get typecasts for getter of the attribute.
+     *
+     * @param  string $attribute
+     * @return string
+     */
+    public function getterTypecasts($attribute)
+    {
+        return '';
+    }
+
+    /**
+     * Get typecasts for setter of the attribute.
+     *
+     * @param  string $attribute
+     * @return string
+     */
+    public function setterTypecasts($attribute)
+    {
+        return '';
     }
 
     /**
@@ -181,18 +202,6 @@ class BaseModel extends EloquentModel
         }
 
         return $array;
-    }
-
-    /**
-     * Get the typecasted attribute of a certain attribute with the given value.
-     *
-     * @param  string $attribute Model attribute
-     * @param  mixed $value     Model value
-     * @return mixed            Typecasted value
-     */
-    public function getTypecasted($attribute, $value)
-    {
-        return $this->makeTransformer([$attribute => $value])->getTransformed()[$attribute];
     }
 
     /**
