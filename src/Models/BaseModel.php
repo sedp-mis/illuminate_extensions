@@ -147,33 +147,6 @@ class BaseModel extends EloquentModel
     }
 
     /**
-     * Returns a data transformer.
-     *
-     * @param  array  $attributes Array attribute data to be transformed to its type
-     * @return Abstractions\Transformer\BaseTransformer
-     */
-    protected function makeTransformer(array $attributes)
-    {
-        return (new BaseTransformer)->set($attributes)->setTransformMap($this->makeTransformMap());
-    }
-
-    /**
-     * Make a string transform map format of typecasts property.
-     *
-     * @return string
-     */
-    protected function makeTransformMap()
-    {
-        $string = '';
-
-        foreach ($this->typecasts as $attribute => $attributeTransformMap) {
-            $string .= "{$attribute},{$attributeTransformMap};";
-        }
-
-        return remove_whitespaces($string);
-    }
-
-    /**
      * Overrides toArray method  of Eloquent to apply transformation or typecasting of attributes.
      *
      * @param array $attributes Selected model attributes to be returned. Optional
