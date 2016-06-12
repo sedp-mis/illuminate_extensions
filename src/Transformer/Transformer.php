@@ -8,11 +8,34 @@ class Transformer
     const OPTION_HOLDER     = '{ }';
     const SET_SEPARATOR     = ',';
 
-    public static function transform($transformationRule, $value)
+    protected $specialOptions = [];
+
+    public function cleanTransformationRule($transformationRule)
     {
-        $options = explode(static::OPTIONS_SEPARATOR, $transformationRule);
-        $transformation = array_shift($options);
-        $option = head($options);
+        $transformationRule = ltrim($transformationRule);
+        $holders = explode(' ', static::OPTION_HOLDER);
+
+        $specialOptions = chars_within($transformationRule, $holders);
+
+        if (count(head($specialOptions)) == 0) {
+            return $transformationRule;
+        }
+
+        foreach (head($specialOptions) as $index => $specialOption) {
+            $transformationRule = str_replace($specialOption, $optKey = "{opt_{$index}}", $transformationRule);
+            $this->specialOptions[$optKey] = $specialOption;
+        }
+
+        return $transformationRule;
+    }
+
+    public function transform($transformationRule, $value)
+    {
+        $transformationRule = $this->cleanTransformationRule($transformationRule);
+        $options            = explode(static::OPTIONS_SEPARATOR, $transformationRule);
+        $transformation     = array_shift($options);
+        $options            = $this->getTrueOptions($options);
+        $option             = head($options);
 
         switch ($transformation) {
             case 'int':
@@ -74,10 +97,25 @@ class Transformer
                 $transformation = $option;
                 array_shift($options);
             default:
+                array_unshift($options, $value);
                 $value = call_user_func_array($transformation, $options);
                 break;
         }
 
         return $value;
-    }    
+    }
+
+    public function getTrueOptions($options)
+    {
+        foreach ($options as &$option) {
+            if (array_key_exists($option, $this->specialOptions)) {
+                $option = $this->specialOptions[$option];
+                // Remove the open and close delimiter { }
+                $option = substr($option, 1);
+                $option = substr($option, 0, -1);
+            }
+        }
+
+        return $options;
+    }
 }
