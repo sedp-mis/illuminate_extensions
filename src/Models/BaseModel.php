@@ -137,6 +137,7 @@ class BaseModel extends EloquentModel
      */
     public function fill(array $attributes)
     {
+        // TODO: Transform using setter typecasts
         if (!empty($attributes) && !empty($this->typecasts)) {
             $attributes = $this->makeTransformer($attributes)->getReversed();
         }
@@ -154,6 +155,7 @@ class BaseModel extends EloquentModel
      */
     public function toArray(array $attributes = null, array $except = null)
     {
+        // TODO: Transform using getter typecasts
         if (method_exists($this, 'removeAppends')) {
             $this->removeAppends();
         }
