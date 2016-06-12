@@ -244,17 +244,7 @@ class BaseModel extends EloquentModel
      */
     public function newCollection(array $models = array())
     {
-        return new \Services\IlluminateExtensions\Collection($models);
-    }
-
-    /**
-     * Returns the writable attributes of the model.
-     *
-     * @return array
-     */
-    public function writable()
-    {
-        return array_diff($this->fillable, [$this->getKeyName()]);
+        return new \SedpMis\Lib\IlluminateExtensions\Collection($models);
     }
 
     /**
@@ -412,16 +402,6 @@ class BaseModel extends EloquentModel
         }
 
         throw (new ModelNotFoundException)->setModel(static::class, $id);
-    }
-
-    /**
-     * Alias of save.
-     *
-     * @return bool
-     */
-    public function saveModel()
-    {
-        return $this->save();
     }
 
     /**
