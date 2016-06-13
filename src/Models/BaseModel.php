@@ -106,29 +106,40 @@ class BaseModel extends EloquentModel
     }
 
     /**
-     * Get typecasts for getter of the attribute.
+     * Get getter typecasts.
      *
      * @param  string $attribute
      * @return string
      */
-    public function getterTypecasts($attribute)
+    public function getterTypecasts($attribute = null)
     {
         return '';
     }
 
     /**
-     * Get typecasts for setter of the attribute.
+     * Get setter typecasts.
      *
      * @param  string $attribute
      * @return string
      */
-    public function setterTypecasts($attribute)
+    public function setterTypecasts($attribute = null)
     {
         return '';
     }
 
     /**
-     * Fill the model with an array of attributes.
+     * Typecast attributes by the given typecasts.
+     *
+     * @param  array $typecasts
+     * @return array
+     */
+    public function typecastAttributes($typecasts)
+    {
+        // TODO:
+    }
+
+    /**
+     * Override. Typecast and fill the model with an array of attributes.
      *
      * @param  array  $attributes
      * @return $this
@@ -137,9 +148,8 @@ class BaseModel extends EloquentModel
      */
     public function fill(array $attributes)
     {
-        // TODO: Transform using setter typecasts
         if (!empty($attributes) && !empty($this->typecasts)) {
-            $attributes = $this->makeTransformer($attributes)->getReversed();
+            $attributes = $this->typecastAttributes($this->setterTypecasts());
         }
 
         parent::fill($attributes);
@@ -148,14 +158,13 @@ class BaseModel extends EloquentModel
     }
 
     /**
-     * Overrides toArray method  of Eloquent to apply transformation or typecasting of attributes.
+     * Overrides. Typecast attributes and convert the model instance to an array.
      *
      * @param array $attributes Selected model attributes to be returned. Optional
      * @return array
      */
     public function toArray(array $attributes = null, array $except = null)
     {
-        // TODO: Transform using getter typecasts
         if (method_exists($this, 'removeAppends')) {
             $this->removeAppends();
         }
@@ -163,11 +172,11 @@ class BaseModel extends EloquentModel
         $array = parent::toArray();
 
         if (!empty($this->typecasts)) {
-            $array = $this->makeTransformer($array)->getTransformed();
+            $array = $this->typecastAttributes($this->getterTypecasts());
         }
 
         if (!empty($attributes)) {
-            $array = array_extract($array, $attributes);
+            $array = array_only($array, $attributes);
         }
 
         if (!empty($except)) {
