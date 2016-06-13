@@ -390,6 +390,9 @@ class BaseModel extends EloquentModel
     public function clean()
     {
         $fillable            = $this->getFillable();
+        if (!in_array($pk = $this->getKeyName(), $fillable)) {
+            $fillable[] = $pk;
+        }
         $attributesWithValue = array_keys($this->attributes);
         $unFillable          = array_diff($attributesWithValue, $fillable);
 
