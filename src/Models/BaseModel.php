@@ -35,7 +35,15 @@ class BaseModel extends EloquentModel
      *
      * @var  string
      */
-    const TYPECASTS_SEPARATOR = ',';
+    const TYPECASTS_SET_SEPARATOR = ',';
+
+    /**
+     * Delimiter use to separate typecasts rules.
+     *
+     * @string
+     */
+    const TYPECASTS_SEPARATOR = '|';
+
 
     /**
      * Instantiate or make new instance via static method.
@@ -106,14 +114,37 @@ class BaseModel extends EloquentModel
     }
 
     /**
+     * Return array of typecast for getter or setter typecasts.
+     *
+     * @param  string $set
+     * @return array
+     */
+    public function arrayOfTypecasts($set)
+    {
+        $set .= 'Typecasts';
+        $typecasts = [];
+        foreach (array_keys($this->typecasts) as $attribute) {
+            $typecasts[$attribute] = $this->{$set}($attribute);
+        }
+
+        return $typecasts;
+    }
+
+    /**
      * Get getter typecasts.
      *
-     * @param  string $attribute
-     * @return string
+     * @param  string|null $attribute
+     * @return string|array
      */
     public function getterTypecasts($attribute = null)
     {
-        return '';
+        // Polymorphic handling for array of getterTypecasts
+        if (is_null($attribute)) {
+            return $this->arrayOfTypecasts('getter');
+        }
+
+        // Logic code
+        return head(explode(static::TYPECASTS_SET_SEPARATOR, $this->typecasts[$attribute]));
     }
 
     /**
@@ -124,18 +155,41 @@ class BaseModel extends EloquentModel
      */
     public function setterTypecasts($attribute = null)
     {
-        return '';
+        // Polymorphic handling for array of getterTypecasts
+        if (is_null($attribute)) {
+            return $this->arrayOfTypecasts('setter');
+        }
+
+        // Logic code
+        $typecast = last(explode(static::TYPECASTS_SET_SEPARATOR, $this->typecasts[$attribute]));
+        return trim($typecast) == '*' ? $this->getterTypecasts($attribute) : $typecast;
     }
 
     /**
      * Typecast attributes by the given typecasts.
      *
      * @param  array $typecasts
+     * @param  array $attributes
      * @return array
      */
-    public function typecastAttributes($typecasts)
+    public function typecastAttributes(array $typecasts, array $attributes = array())
     {
-        // TODO:
+        $attributes = $attributes ?: $this->attributes;
+
+        foreach ($attributes as $attribute) {
+            if (!array_key_exists($attribute, $typecasts)) {
+                continue;
+            }
+
+            $typecast = $typecasts[$attribute];
+            $rules    = explode(static::TYPECASTS_SEPARATOR, $typecast);
+
+            foreach ($rules as $rule) {
+                $attributes[$attribute] = (new Transformer)->transform($rule, $this->attributes[$attribute]);
+            }
+        }
+
+        return $attributes;
     }
 
     /**
@@ -149,7 +203,7 @@ class BaseModel extends EloquentModel
     public function fill(array $attributes)
     {
         if (!empty($attributes) && !empty($this->typecasts)) {
-            $attributes = $this->typecastAttributes($this->setterTypecasts());
+            $attributes = $this->typecastAttributes($this->setterTypecasts(), $attributes);
         }
 
         parent::fill($attributes);
@@ -171,20 +225,20 @@ class BaseModel extends EloquentModel
 
         $array = parent::toArray();
 
-        if (!empty($this->typecasts)) {
-            $array = $this->typecastAttributes($this->getterTypecasts());
-        }
-
-        if (!empty($attributes)) {
-            $array = array_only($array, $attributes);
-        }
-
         if (!empty($except)) {
             foreach ($except as $exceptAttribute) {
                 unset($array[$exceptAttribute]);
             }
         }
 
+        if (!empty($attributes)) {
+            $array = array_only($array, $attributes);
+        }
+
+        if (!empty($this->typecasts)) {
+            $array = $this->typecastAttributes($this->getterTypecasts(), $array);
+        }
+        
         return $array;
     }
 
