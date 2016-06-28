@@ -31,6 +31,13 @@ class BaseModel extends EloquentModel
     protected $trashedAttributes = [];
 
     /**
+     * Array of relations which can be converted to nullModel.
+     *
+     * @var boolean
+     */
+    protected $toNullModelRelations = [];
+
+    /**
      * Delimiter use to separate the getter and setter typecasts.
      *
      * @var  string
@@ -44,6 +51,25 @@ class BaseModel extends EloquentModel
      */
     const TYPECASTS_SEPARATOR = '|';
 
+    /**
+     * Override. Get a relationship value from a method.
+     *
+     * @param  string  $key
+     * @param  string  $camelKey
+     * @return mixed
+     *
+     * @throws \LogicException
+     */
+    protected function getRelationshipFromMethod($key, $camelKey)
+    {
+        $relation = parent::getRelationshipFromMethod($key, $camelKey);
+        
+        if (is_null($relation) && in_array($camelKey, $this->toNullModelRelations)) {
+            return $this->relations[$key] = new NullModel;
+        }
+
+        return $relation;
+    }
 
     /**
      * Instantiate or make new instance via static method.

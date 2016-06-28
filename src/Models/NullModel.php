@@ -15,12 +15,7 @@ class NullModel extends BaseModel
 
     public function __get($key)
     {
-        // Return new NullModel for null relation model
-        if (in_array($key, array_keys($this->relations))) {
-            return new static;
-        }
-
-        return null;
+        return new static;
     }
 
     public function toArray()
