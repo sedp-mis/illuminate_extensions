@@ -33,7 +33,7 @@ class BaseModel extends EloquentModel
     /**
      * Array of relations which can be converted to nullModel.
      *
-     * @var boolean
+     * @var array
      */
     protected $toNullModelRelations = [];
 
