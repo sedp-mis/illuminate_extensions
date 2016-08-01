@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Database\Eloquent\Builder;
-
 namespace SedpMis\Lib\Models;
+
+use Illuminate\Database\Eloquent\Builder;
 
 class EloquentBuilder extends Builder
 {
