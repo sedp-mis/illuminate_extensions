@@ -2,7 +2,7 @@
 
 namespace SedpMis\Lib\Query;
 
-use Illuminate\Database\DatabaseManager as DB;
+use Illuminate\Support\Facades\DB;
 
 class Joiner
 {
