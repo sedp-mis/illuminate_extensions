@@ -18,7 +18,7 @@
             "SedpMis\\Lib\\": "src"
         },
         "files": [
-            "src/helpers.php"
+            "src/helpers/index.php"
         ]
     },
     "minimum-stability": "stable"
