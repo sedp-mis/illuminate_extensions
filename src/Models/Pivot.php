@@ -3,6 +3,7 @@
 namespace SedpMis\Lib\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Copy-pasted from \Illuminate\Database\Eloquent\Relations\Pivot
