@@ -202,7 +202,7 @@ class BaseModel extends EloquentModel
     {
         $attributes = $attributes ?: $this->attributes;
 
-        foreach ($attributes as $attribute) {
+        foreach (array_keys($attributes) as $attribute) {
             if (!array_key_exists($attribute, $typecasts)) {
                 continue;
             }

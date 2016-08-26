@@ -6,7 +6,6 @@ class Transformer
 {
     const OPTIONS_SEPARATOR = ':';
     const OPTION_HOLDER     = '{ }';
-    const SET_SEPARATOR     = ',';
 
     protected $specialOptions = [];
 
@@ -80,7 +79,7 @@ class Transformer
                 $value = ucwords($value);
                 break;
             case 'password':
-                $value = \Hash::make($value);
+                $value = \Illuminate\Support\Facades\Hash::make($value);
                 break;
             case 'date':
                 if (!$value OR $value == '0000-00-00') {
