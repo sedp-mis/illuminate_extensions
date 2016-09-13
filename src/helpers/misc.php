@@ -1,25 +1,5 @@
 <?php
 
-/*
- * Miscellaneous Functions/Methods
- */
-if (!function_exists('call')) {
-    /**
-     * Call a class method.
-     *
-     * @param  string $className Name of the class
-     * @param  string $method    Method to call
-     * @param  array  $params    Method parameters (depends on the method to call)
-     * @return mixed
-     */
-    function call($className, $method, $params = [])
-    {
-        $class = \App::make($className);
-
-        return call_user_func_array([$class, $method], $params);
-    }
-}
-
 if (!function_exists('coalesce')) {
     /**
      * Get the first non-null from the parameters.
