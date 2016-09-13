@@ -1,9 +1,9 @@
-<?php 
+<?php
 
 namespace SedpMis\Lib\Makeable;
 
-trait MakeableTrait {
-
+trait MakeableTrait
+{
     /**
      * Instantiate or make new instance via static method,  can passed any number of parameters.
      *

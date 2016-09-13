@@ -16,7 +16,7 @@ class Nested
      * @param  string   $fk           Foreign key name (parent_id)
      * @param  string   $childrenAttr Children attribute to be used (children)
      * @param  string   $levelLabel   Level label (level)
-     * @return array                  The nested collection
+     * @return array    The nested collection
      */
     public static function make($collection, callable $formatNode = null, $pk = 'id', $fk = 'parent_id', $childrenAttr = 'children', $levelLabel = 'level')
     {

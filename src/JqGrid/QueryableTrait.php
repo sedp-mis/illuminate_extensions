@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace SedpMis\Lib\JqGrid;
 

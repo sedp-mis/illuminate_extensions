@@ -1,11 +1,11 @@
 <?php
 
-if(! function_exists('num_zero_pad')) {
+if (!function_exists('num_zero_pad')) {
     /**
      * Pad numbers with zeros.
      *
-     * @param  int $num
-     * @param  int $length
+     * @param  int    $num
+     * @param  int    $length
      * @return string
      */
     function num_zero_pad($num, $length)

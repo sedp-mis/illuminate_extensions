@@ -6,7 +6,7 @@
 if (!function_exists('array_is_assoc')) {
     /**
      * Determine if array is associative(string) array.
-     * 
+     *
      * @param  array $arr
      * @return bool
      */
@@ -23,7 +23,7 @@ if (!function_exists('array_is_assoc')) {
 if (!function_exists('array_pluck_unique')) {
     /**
      * Pluck unique array.
-     * 
+     *
      * @param  array  $arr
      * @param  string $key
      * @return array
@@ -37,7 +37,7 @@ if (!function_exists('array_pluck_unique')) {
 if (!function_exists('array_column_unique')) {
     /**
      * Pluck unique array using array_column().
-     * 
+     *
      * @param  array  $arr
      * @param  string $key
      * @return array
@@ -79,8 +79,8 @@ if (!function_exists('array_start_from')) {
     /**
      * Return elements of array starting from an element which first passes the predicate callback.
      *
-     * @param  array|mixed   $array
-     * @param  callable $predicate
+     * @param  array|mixed $array
+     * @param  callable    $predicate
      * @return array
      */
     function array_start_from($array, callable $predicate)

@@ -12,7 +12,7 @@ class Transformer
     public function cleanTransformationRule($transformationRule)
     {
         $transformationRule = ltrim($transformationRule);
-        $holders = explode(' ', static::OPTION_HOLDER);
+        $holders            = explode(' ', static::OPTION_HOLDER);
 
         $specialOptions = chars_within($transformationRule, $holders);
 
@@ -21,7 +21,7 @@ class Transformer
         }
 
         foreach (head($specialOptions) as $index => $specialOption) {
-            $transformationRule = str_replace($specialOption, $optKey = "{opt_{$index}}", $transformationRule);
+            $transformationRule            = str_replace($specialOption, $optKey = "{opt_{$index}}", $transformationRule);
             $this->specialOptions[$optKey] = $specialOption;
         }
 
@@ -45,7 +45,7 @@ class Transformer
             case 'boolean':
                 $value = (bool) $value;
                 break;
-            case 'string': 
+            case 'string':
                 $value = $value.'';
                 break;
             case 'nullable':
@@ -82,17 +82,17 @@ class Transformer
                 $value = \Illuminate\Support\Facades\Hash::make($value);
                 break;
             case 'date':
-                if (!$value OR $value == '0000-00-00') {
+                if (!$value or $value == '0000-00-00') {
                     $value = null;
                 } else {
                     $value = date($option ?: 'Y-m-d', strtotime($value));
                 }
                 break;
             case 'zerofill':
-                $value = str_pad($value, ( ((int)$option) ?: 5 ), 0, STR_PAD_LEFT);
+                $value = str_pad($value, (((int) $option) ?: 5), 0, STR_PAD_LEFT);
                 break;
             case 'callback':
-            case 'function': 
+            case 'function':
                 $transformation = $option;
                 array_shift($options);
             default:

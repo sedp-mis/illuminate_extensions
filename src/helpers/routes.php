@@ -10,14 +10,14 @@ if (!function_exists('ra')) {
      * Action Codes:
      * i = index, c = create, e = edit, w = show
      * s = store, u = update, d = destroy'
-     * Example: ra('isudw');
+     * Example: ra('isudw');.
      *
      * @param  string $actions
      * @return array
      */
     function ra($actionCodes)
     {
-        $actions = [];
+        $actions     = [];
         $actionCodes = str_split($actionCodes);
 
         $actionsMap = [
@@ -27,7 +27,7 @@ if (!function_exists('ra')) {
             'w' => 'show',
             's' => 'store',
             'u' => 'update',
-            'd' => 'destroy'
+            'd' => 'destroy',
         ];
 
         foreach ($actionCodes as $code) {

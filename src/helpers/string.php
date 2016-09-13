@@ -11,7 +11,7 @@ if (!function_exists('ucwords_except')) {
      * @param  array|null $except
      * @return string
      */
-    function ucwords_except($string, array $except = NULL)
+    function ucwords_except($string, array $except = null)
     {
         $except_locator = '&*!-';
 
@@ -19,16 +19,14 @@ if (!function_exists('ucwords_except')) {
 
         $except = array_merge($default_except, $except ?: []);
 
-        foreach ($except as $i => $except_value) 
-        {
+        foreach ($except as $i => $except_value) {
             $string = str_replace(' '.$except_value.' ', $except_locator.$i.' ', $string);
         }
 
         $string = ucwords($string);
 
-        foreach ($except as $i => $except_value) 
-        {
-            $string = str_replace($except_locator.$i, ' '. $except_value.' ', $string);    
+        foreach ($except as $i => $except_value) {
+            $string = str_replace($except_locator.$i, ' '.$except_value.' ', $string);
         }
 
         return $string;
@@ -52,8 +50,8 @@ if (!function_exists('remove_last_char')) {
     /**
      * Remove last character(s).
      *
-     * @param  string  $str
-     * @param  integer $count
+     * @param  string $str
+     * @param  int    $count
      * @return string
      */
     function remove_last_char($str, $count = 1)
@@ -62,25 +60,24 @@ if (!function_exists('remove_last_char')) {
     }
 }
 
-if(!function_exists('utf8'))
-{
+if (!function_exists('utf8')) {
     /**
      * Convert special characters to UTF8 format.
      *
-     * @param  string   $text   The text to be converted.
+     * @param  string $text The text to be converted
      * @return string
      */
     function utf8($text)
     {
         try {
             return iconv('UTF-8', 'windows-1252', $text);
-        } catch(\ErrorException $e) {
+        } catch (\ErrorException $e) {
             return $text;
         }
     }
 }
 
-if ( ! function_exists('println')) {
+if (!function_exists('println')) {
     /**
      * Print with new line.
      *
@@ -89,20 +86,19 @@ if ( ! function_exists('println')) {
      */
     function println($data)
     {
-        foreach(func_get_args() as $data)
-        {
+        foreach (func_get_args() as $data) {
             print_r($data);
-            print("\n");
+            echo "\n";
         }
     }
 }
 
-if ( ! function_exists('is_plural')) {
+if (!function_exists('is_plural')) {
     /**
      * Determine whether string is plural.
      *
-     * @param  string  $string
-     * @return boolean
+     * @param  string $string
+     * @return bool
      */
     function is_plural($string)
     {
@@ -110,21 +106,20 @@ if ( ! function_exists('is_plural')) {
     }
 }
 
-if ( ! function_exists('is_singular')) {
+if (!function_exists('is_singular')) {
     /**
      * Determine whether string is singular.
      *
-     * @param  string  $string
-     * @return boolean
+     * @param  string $string
+     * @return bool
      */
     function is_singular($string)
     {
-        return ! is_plural($string);
+        return !is_plural($string);
     }
 }
 
-if( ! function_exists('replace_extension'))
-{
+if (!function_exists('replace_extension')) {
     /**
      * Replace filename extension.
      *
@@ -132,9 +127,11 @@ if( ! function_exists('replace_extension'))
      * @param  string $new_extension
      * @return string
      */
-    function replace_extension($filename, $new_extension) {
+    function replace_extension($filename, $new_extension)
+    {
         $info = pathinfo($filename);
-        return $info['filename'] . '.' . $new_extension;
+
+        return $info['filename'].'.'.$new_extension;
     }
 }
 
@@ -143,7 +140,7 @@ if (!function_exists('left')) {
      * Get the first N characters from left.
      *
      * @param  string $str
-     * @param  int $length
+     * @param  int    $length
      * @return string
      */
     function left($str, $length)
@@ -157,7 +154,7 @@ if (!function_exists('right')) {
      * Get the first N characters from right.
      *
      * @param  string $str
-     * @param  int $length
+     * @param  int    $length
      * @return string
      */
     function right($str, $length)
@@ -170,11 +167,12 @@ if (!function_exists('space')) {
     /**
      * Add N spaces.
      *
-     * @param  int $number
+     * @param  int    $number
      * @return string
      */
-    function space($number) {
-        return str_repeat(" ", $number);
+    function space($number)
+    {
+        return str_repeat(' ', $number);
     }
 }
 
@@ -235,9 +233,9 @@ if (!function_exists('get_chars')) {
     /**
      * Get N characters from left(start) or right side.
      *
-     * @param  string  $str
-     * @param  int  $len
-     * @param  boolean $fromStart
+     * @param  string $str
+     * @param  int    $len
+     * @param  bool   $fromStart
      * @return string
      */
     function get_chars($str, $len, $fromStart = true)
@@ -258,7 +256,7 @@ if (!function_exists('chars_within')) {
      */
     function chars_within($string, array $delims)
     {
-        $openDelim = head($delims);
+        $openDelim  = head($delims);
         $closeDelim = end($delims);
 
         preg_match_all('/'.$openDelim.'([A-Za-z0-9_ ]+?)'.$closeDelim.'/', $string, $result);

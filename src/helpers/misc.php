@@ -39,7 +39,7 @@ if (!function_exists('set_static')) {
      *
      * @param string $class
      * @param string $key
-     * @param mixed $value
+     * @param mixed  $value
      */
     function set_static($class, $key, $value)
     {
@@ -55,20 +55,20 @@ if (!function_exists('ddr')) {
      */
     function ddr($data)
     {
-        foreach(func_get_args() as $data)
-        {
+        foreach (func_get_args() as $data) {
             if ($data === false) {
                 return;
             }
 
-            if (is_object($data) && method_exists($data, 'toArray'))
+            if (is_object($data) && method_exists($data, 'toArray')) {
                 print_r($data->toArray());
-            else
+            } else {
                 print_r($data);
+            }
 
-            print("\n");
+            echo "\n";
         }
-        
+
         die();
     }
 }

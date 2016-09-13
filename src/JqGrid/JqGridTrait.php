@@ -1,19 +1,19 @@
-<?php 
+<?php
 
 namespace SedpMis\Lib\JqGrid;
 
 /**
  * Trait for generating data for jqGrid tables.
  */
-trait JqGridTrait {
-
+trait JqGridTrait
+{
     /**
      * @var
      */
     protected $jqGridQuery;
 
     /**
-     * Find corresponding field that will be accessed in database
+     * Find corresponding field that will be accessed in database.
      *
      * @param $field
      * @return string
@@ -21,54 +21,58 @@ trait JqGridTrait {
     private function getJqSearchField($field)
     {
         // jqSearchable is not initialized
-        if (!isset($this->jqSearchable) || !is_array($this->jqSearchable))
+        if (!isset($this->jqSearchable) || !is_array($this->jqSearchable)) {
             return $field;
+        }
 
         return isset($this->jqSearchable[$field]) ? $this->jqSearchable[$field] : $field;
     }
 
     private function isExcluded($field)
     {
-        if( !isset($this->jqExcludedField) || !is_array($this->jqExcludedField))
-            return FALSE;
-
-        foreach ($this->jqExcludedField as $f) // TODO: (100) check if can be replaced by in_array php native function
-        {
-            if($field == $f)
-                return TRUE;
+        if (!isset($this->jqExcludedField) || !is_array($this->jqExcludedField)) {
+            return false;
         }
 
-        return FALSE;
+        foreach ($this->jqExcludedField as $f) { // TODO: (100) check if can be replaced by in_array php native function
+            if ($field == $f) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
-     * Find corresponding field that will be accessed in database
+     * Find corresponding field that will be accessed in database.
      *
      * @param $field
      * @return $string
      */
     private function getJqFilterField($field)
     {
-        if( ! isset($this->jqFilterFields) || ! is_array($this->jqFilterFields))
+        if (!isset($this->jqFilterFields) || !is_array($this->jqFilterFields)) {
             $this->jqFilterFields = $this->jqSearchable;
+        }
 
-        if( ! isset($this->jqFilterFields) || ! is_array($this->jqFilterFields))
+        if (!isset($this->jqFilterFields) || !is_array($this->jqFilterFields)) {
             return $field;
+        }
 
         return isset($this->jqFilterFields[$field]) ? $this->jqFilterFields[$field] : $field;
     }
 
     /**
-     * Build query for the search
+     * Build query for the search.
      *
      * @return $this
      */
     private function jqSearchQuery()
     {
-        $searchFilters = ($filters = \Input::get('filters')) ? $filters : NULL;
+        $searchFilters = ($filters = \Input::get('filters')) ? $filters : null;
 
         // not valid search filter
-        if (!($searchFilters != NULL) || (!isset($searchFilters['rules'])) || (!is_array($searchFilters['rules']))) {
+        if (!($searchFilters != null) || (!isset($searchFilters['rules'])) || (!is_array($searchFilters['rules']))) {
             return $this;
         }
 
@@ -77,16 +81,16 @@ trait JqGridTrait {
                 $field = $this->getJqSearchField($rule['field']);
 
                 if (is_array($field)) {
-                    $raw = "CONCAT(";
+                    $raw = 'CONCAT(';
                     $count = 0;
                     foreach ($field as $f) {
-                        if( ! $this->isExcluded($f)) {
-                            $raw .= ($count) ? "," : "";
+                        if (!$this->isExcluded($f)) {
+                            $raw .= ($count) ? ',' : '';
                             $raw .= "{$f}";
                             $count++;
                         }
                     }
-                    $raw .= ")";
+                    $raw .= ')';
 
                     $data = str_replace(' ', '', $rule['data']);
                     $data = str_replace(',', '', $data);
@@ -94,9 +98,10 @@ trait JqGridTrait {
 
                     $rImp = implode('%', $rArr);
                     $query->orWhere(\DB::raw($raw), 'LIKE', "%{$rImp}%");
-                } else if($field){
-                    if( ! $this->isExcluded($field))
+                } elseif ($field) {
+                    if (!$this->isExcluded($field)) {
                         $query->orWhere($field, 'LIKE', "%{$rule['data']}%");
+                    }
                 }
             }
         }));
@@ -105,56 +110,52 @@ trait JqGridTrait {
     }
 
     /**
-     * Build query for filters
+     * Build query for filters.
      *
      * @return $this
      */
     private function jqFilterQuery()
     {
-        if( ($filter = \Input::get('filter')) && is_array($filter))
-        {
-            $this->setJqGridQuery($this->jqGridQuery->where(function($query) use ($filter) {
-                foreach ($filter as $k=>$val)
-                {
+        if (($filter = \Input::get('filter')) && is_array($filter)) {
+            $this->setJqGridQuery($this->jqGridQuery->where(function ($query) use ($filter) {
+                foreach ($filter as $k => $val) {
                     $field = $this->getJqFilterField($k);
 
-                    if(is_array($val))
-                    {
-                        $query->where(function($query) use ($val, $field) {
-                            foreach($val as $v)
-                            {
-                                if( ! $this->isExcluded($v))
+                    if (is_array($val)) {
+                        $query->where(function ($query) use ($val, $field) {
+                            foreach ($val as $v) {
+                                if (!$this->isExcluded($v)) {
                                     $query->orWhere($field, '=', $v);
+                                }
                             }
                         });
-                    }
-                    else
-                    {
-                        if( ! $val)
-                        {
-                            if( ! $this->isExcluded($val))
-                                $query->where($field, '=', NULL);
-                        } else
-                        {
-                            if( ! $this->isExcluded($val))
+                    } else {
+                        if (!$val) {
+                            if (!$this->isExcluded($val)) {
+                                $query->where($field, '=', null);
+                            }
+                        } else {
+                            if (!$this->isExcluded($val)) {
                                 $query->where($field, '=', $val);
+                            }
                         }
                     }
                 }
             }));
         }
+
         return $this;
     }
 
     /**
-     * Build query for order
+     * Build query for order.
      *
      * @return $this
      */
     private function jqOrderQuery()
     {
         if ($orderIndex = \Input::get('sidx')) {
-            $this->setJqGridQuery($this->jqGridQuery->orderBy($this->getJqSearchField($orderIndex), \Input::get('sord')) ? : 'asc');
+            $this->setJqGridQuery($this->jqGridQuery->orderBy($this->getJqSearchField($orderIndex), \Input::get('sord')) ?: 'asc');
         }
 
         return $this;
@@ -163,17 +164,19 @@ trait JqGridTrait {
     public function setJqSearchable($jqSearchable = [])
     {
         $this->jqSearchable = $jqSearchable;
+
         return $this;
     }
 
     public function setJqFilterFields($jqFilterFields = [])
     {
         $this->jqFilterFields = $jqFilterFields;
+
         return $this;
     }
 
     /**
-     * Get current jqgrid query
+     * Get current jqgrid query.
      *
      * @return mixed
      */
@@ -183,9 +186,9 @@ trait JqGridTrait {
     }
 
     /**
-     * Set jqgrid query to be used
+     * Set jqgrid query to be used.
      *
-     * @param mixed $query
+     * @param  mixed $query
      * @return $this
      */
     public function setJqGridQuery($query)
@@ -196,14 +199,13 @@ trait JqGridTrait {
     }
 
     /**
-     * Return formatted data to be parsed by jqgrid
+     * Return formatted data to be parsed by jqgrid.
      *
      * @return mixed
      */
     public function makeJqGrid()
     {
-
-        $data = $this->jqSearchQuery()->jqFilterQuery()->jqOrderQuery()->getJqGridQuery()->paginate((\Input::get('rows') ? : 15));
+        $data = $this->jqSearchQuery()->jqFilterQuery()->jqOrderQuery()->getJqGridQuery()->paginate((\Input::get('rows') ?: 15));
 
         $out = $data->getCollection()->toArray();
 
@@ -212,8 +214,8 @@ trait JqGridTrait {
             'Total'      => ceil($data->getTotal() / $data->getPerPage()),
             'Records'    => $data->getTotal(),
             'SortColumn' => \Input::get('sidx'),
-            'SortOrder'  => \Input::get('sord') ? : "asc",
-            'Data'       => $out
+            'SortOrder'  => \Input::get('sord') ?: 'asc',
+            'Data'       => $out,
         ];
     }
 }

@@ -3,11 +3,11 @@
 /*
  * Date Helpers
  */
-if(!function_exists('carbon')) {
+if (!function_exists('carbon')) {
     /**
      * Convert or return new carbon instance.
      *
-     * @param  string|mixed $datetime
+     * @param  string|mixed   $datetime
      * @return \Carbon\Carbon
      */
     function carbon($datetime = null)
@@ -24,7 +24,7 @@ if(!function_exists('carbon')) {
     }
 }
 
-if(!function_exists('sql_date')) {
+if (!function_exists('sql_date')) {
     /**
      * Convert date to mysql date format.
      *
